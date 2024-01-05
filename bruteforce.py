@@ -1,5 +1,6 @@
 from itertools import combinations
 import pandas as pd
+import timeit
 
 
 # variables
@@ -13,6 +14,17 @@ dataframe = pd.read_csv(datas_actions_file)
 # Convertir le DataFrame en liste
 data_list = dataframe.to_numpy().tolist()
 data_list = [action for action in data_list if action[1] > 0]
+
+
+# calcul du temps d execution d'une fonction
+def execution_time(function):
+    temps_debut = timeit.default_timer()
+    resultat = function()
+    temps_fin = timeit.default_timer()
+    # durée d execution en millisecondes
+    time_execution = round(((temps_fin - temps_debut) * 1000), 6)
+
+    return resultat, time_execution
 
 
 def itertools_brute_force(amount: float, actions_list: list):
@@ -37,13 +49,48 @@ def itertools_brute_force(amount: float, actions_list: list):
     return profit_total_final, actions_selection_final
 
 
-def result_display(profit_total: float, actions_selection: list):
+def recursive_brute_force(amount: float, actions_list: list, actions_selection: list = None):
+    """
+    Algorithme de force brute avec récursivité : Calcule toutes les possibilités
+    Complexité : O(2^n)
+    """
+    actions_selection = actions_selection if actions_selection else []
+    if not actions_list:
+        return sum([float(i[2]) for i in actions_selection]), actions_selection
+    # ne selectionne pas l'action
+    profit_total_1, lst_profit_total_1 = recursive_brute_force(amount, actions_list[1:], actions_selection)
+    # selectionne l'action
+    action_current = actions_list[0]
+    # verifie si le portefeuille restant permet d'acheter l'action
+    if float(action_current[1]) <= amount:
+        profit_total_2, lst_profit_total_2 = recursive_brute_force(
+            amount - float(action_current[1]),
+            actions_list[1:],
+            actions_selection + [action_current]
+            )
+        if profit_total_1 < profit_total_2:
+            return profit_total_2, lst_profit_total_2
+    return profit_total_1, lst_profit_total_1
+
+
+# affichage des resultats
+def result_display(results: tuple):
+    profit_total = results[0][0]
+    actions_selection = results[0][1]
+    execution_time = results[1]
+
     print("\nListe d'actions: \n")
     for action in actions_selection:
         name, price, profit = action
         print(f"Nom : {name}  \tPrix : {price}  \tProfit : {profit} ")
-    print(f"\nProfit total : {round(profit_total, 2)} \tCout Total : {sum([float(i[1]) for i in actions_selection])}\n")
+    print(
+        f"\nProfit total : {round(profit_total, 2)} \tCout Total : {sum([float(i[1]) for i in actions_selection])}\n"
+    )
+    print(f"\nTemps d'execution : {execution_time} ms.\n")
 
 
 # méthode itertools.combinations
-result_display(*itertools_brute_force(amount, data_list))
+result_display(execution_time(lambda: itertools_brute_force(amount, data_list)))
+
+# méthode avec récursivité
+result_display(execution_time(lambda: recursive_brute_force(amount, data_list)))
