@@ -3,15 +3,13 @@ import timeit
 
 # variables
 amount = 500
-datas_actions_file = "./data/dataset1_Python+P7.csv"
+datas_actions_file = "./data/dataset2_Python+P7.csv"
 
 # extraction des données du fichier csv
 dataframe = pd.read_csv(datas_actions_file)
 
 # Converti le DataFrame en liste
 data_list = dataframe.to_numpy().tolist()
-# suppression des actions <= 0
-data_list = [action for action in data_list if action[1] > 0]
 
 
 # calcul du temps d execution d'une fonction
@@ -20,16 +18,33 @@ def execution_time(function):
     resultat = function()
     temps_fin = timeit.default_timer()
     # durée d execution en millisecondes
-    time_execution = round(((temps_fin - temps_debut) * 1000), 6)
+    time_execution = round(((temps_fin - temps_debut) * 1000), 2)
 
     return resultat, time_execution
 
 
-def dynamic_method(amount: float, actions_list: list):
+def dynamic_method(amount: float, actions_list: list, type: int):
     """
     Algorithme de programmation dynamique : Création d'une matrice amount * nombre d'actions
     Complexité : O(n*capacite)
     """
+    # type de precision, 1-> avec 2 décimales, 2-> en arrondissant au premier entier
+    if type == 1:
+        actions_list = [
+            [action[0], round(action[1] * 100), round(action[2] * 100)]
+            for action in actions_list
+            if action[1] > 0
+        ]
+        amount *= 100
+        div_values = 100
+    elif type == 2:
+        actions_list = [
+            [action[0], round(action[1]), round(action[2])]
+            for action in actions_list
+            if action[1] > 0
+        ]
+        div_values = 1
+
     # creation de la matrice
     matrice = [[0 for _ in range(0, amount + 1)] for _ in range(len(actions_list) + 1)]
     # remplissage de la matrice
@@ -39,7 +54,7 @@ def dynamic_method(amount: float, actions_list: list):
                 matrice[actions_index][amount_range] = max(
                     actions_list[actions_index - 1][2]
                     + matrice[actions_index - 1][
-                        amount_range - int(actions_list[actions_index - 1][1])
+                        amount_range - actions_list[actions_index - 1][1]
                     ],
                     matrice[actions_index - 1][amount_range],
                 )
@@ -57,15 +72,20 @@ def dynamic_method(amount: float, actions_list: list):
         current_action = actions_list[nb_actions - 1]
         if (
             matrice[nb_actions][amount_selection]
-            == matrice[nb_actions - 1][amount_selection - int(current_action[1])]
+            == matrice[nb_actions - 1][amount_selection - current_action[1]]
             + current_action[2]
         ):
             actions_list_selection.append(current_action)
-            amount_selection -= int(current_action[1])
+            amount_selection -= current_action[1]
 
         nb_actions -= 1
 
-    return matrice[-1][-1], actions_list_selection
+    actions_list_selection = [
+        [action[0], action[1] / div_values, action[2] / div_values]
+        for action in actions_list_selection
+    ]
+
+    return matrice[-1][-1] / div_values, actions_list_selection
 
 
 # affichage des resultats
@@ -78,11 +98,17 @@ def result_display(results: tuple):
     for action in actions_selection:
         name, price, profit = action
         print(f"Nom : {name}  \tPrix : {price}  \tProfit : {profit} ")
+    total_cost = round(sum([float(i[1]) for i in actions_selection]), 2)
     print(
-        f"\nProfit total : {round(profit_total, 2)} \tCout Total : {sum([float(i[1]) for i in actions_selection])}\n"
+        f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n"
     )
     print(f"\nTemps d'execution : {execution_time} ms.\n")
 
 
 # méthode dynamique
-result_display(execution_time(lambda: dynamic_method(amount, data_list)))
+
+# type 1 avec 2 decimales
+result_display(execution_time(lambda: dynamic_method(amount, data_list, 1)))
+
+# type 2 en arrondissant
+result_display(execution_time(lambda: dynamic_method(amount, data_list, 2)))

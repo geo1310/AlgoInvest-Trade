@@ -32,7 +32,81 @@ Vous pouvez également définir la politique sur "Bypass" pour permettre l'exéc
 
 ---
 
-### Procédure pour générer un rapport flake8 en HTML
+
+
+# Lancement et Fonctionnement de l'Application
+
+## AlgoInvest&Trade
+
+Algorithmes qui d'aprés une liste d'actions comportant pour chacune le nom , le prix et le profit, fait ressortir une liste d'actions avec un profit maximum pour un portefeuille donné ( 500€ par défaut ) en ne pouvant prendre qu'une unité par action.
+
+Plusieurs méthodes sont utilisées :
+
+### 1.  **Force Brute :** 
+Toutes les combinaisons d'actions sont calculées afin de faire ressortir la meilleure.
+
+### Usage : script bruteforce.py
+
+Dans ce script on peut régler deux variables
+
+* `amount` : la valeur du portefeuille
+* `datas_actions_file` : le fichier csv contenant la liste des actions à analysées ( les fichiers csv doivent etre placés dans le dossier data du projet)
+
+Ce script execute deux fonctions : 
+
+1. `itertools_brute_force(amount: float, actions_list: list)`
+
+    Calcule toutes les combinaisons possibles en utilisant la fonction `combinations` du module `itertools`, qui génère toutes les combinaisons possibles d'une séquence
+
+2. `recursive_brute_force(amount: float, actions_list: list, actions_selection: list = None)`
+
+    Calcule toutes les combinaisons possibles en utilisant la récursivité
+
+```bash
+python bruteforce.py  # ou python3 bruteforce.py
+```
+
+Aprés lancement du script la console affiche le résultat pour les deux fonctions et le temps d'execution de chaque fonction.
+
+
+
+
+### 2. **Programmation Dynamique :** 
+Une matrice est crée, comprenant d'une part toutes les valeurs possibles du portefeuille de 0 au max et d'autre part une ligne pour chaque action de la liste en commencant par 0 action.
+le but étant de construire la solution petit à petit pour chaque valeur de Portefeuille et en maximisant les valeurs d'actions pouvant y etre insérée par rapport à la ligne precedente.
+Avec cette méthode on uitlise les calculs deja effectués des lignes precedentes augmentant ainsi les performances.
+La derniere case de la matrice representant la solution optimale.
+
+### Usage : script optimized.py
+
+Dans ce script on peut régler deux variables
+
+* `amount` : la valeur du portefeuille
+* `datas_actions_file` : le fichier csv contenant la liste des actions à analysées ( les fichiers csv doivent etre placés dans le dossier data du projet)
+
+Ce script execute la fonction : 
+
+1. `dynamic_method(amount: float, actions_list: list, type: int)`
+
+La fonction est lancée deux fois avec un type different :
+
+1. Type 1 : on garde la précision des des prix et valeurs d'actions ( 2 décimales )
+    amount et toutes les valeurs sont multipliées par 100 afin d'assurer le bon fonctionnement de la matrice et de l'indexage ( nombres entiers).
+
+2. Type 2 : on garde l'amount et arrondi toutes les valeurs d'actions au nombre entier le plus proche.
+
+
+```bash
+python optimized.py  # ou python3 optimized.py
+```
+
+Aprés lancement du script la console affiche le résultat pour les deux types de calculs et le temps d'execution.
+
+---- 
+
+### Vérification du Code : 
+
+#### Procédure pour générer un rapport flake8 en HTML
 
 
 Dans le terminal dans le dossier du projet , tapez la commande suivante pour afficher la politique d'exécution actuelle :
@@ -40,13 +114,5 @@ Dans le terminal dans le dossier du projet , tapez la commande suivante pour aff
 flake8 --format=html --htmldir=rapports_flake8 --exclude=.venv-projet4
 ```
 Le rapport sera sauvegardé dans le dossier rapports_flake8, il suffira de lancer le fichier index.html
-# Lancement et Fonctionnement de l'Application
 
-## AlgoInvest&Trade
-
-## Usage
-
-```bash
-python main.py  # ou python3 main.py
-```
 

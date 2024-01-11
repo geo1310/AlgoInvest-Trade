@@ -22,7 +22,7 @@ def execution_time(function):
     resultat = function()
     temps_fin = timeit.default_timer()
     # durée d execution en millisecondes
-    time_execution = round(((temps_fin - temps_debut) * 1000), 6)
+    time_execution = round(((temps_fin - temps_debut) * 1000), 2)
 
     return resultat, time_execution
 
