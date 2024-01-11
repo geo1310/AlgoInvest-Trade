@@ -90,10 +90,10 @@ Ce script execute la fonction :
 
 La fonction est lancée deux fois avec un type different :
 
-1. Type 1 : on garde la précision des des prix et valeurs d'actions ( 2 décimales )
+1. Type 1 : on garde la précision des prix d'actions ( 2 décimales )
     amount et toutes les valeurs sont multipliées par 100 afin d'assurer le bon fonctionnement de la matrice et de l'indexage ( nombres entiers).
 
-2. Type 2 : on garde l'amount et arrondi toutes les valeurs d'actions au nombre entier le plus proche.
+2. Type 2 : on garde l'amount et on arrondi les prix d'actions au nombre entier le plus proche.
 
 
 ```bash

@@ -80,9 +80,11 @@ def result_display(results: tuple):
     execution_time = results[1]
 
     print("\nListe d'actions: \n")
+    index = 1
     for action in actions_selection:
         name, price, profit = action
-        print(f"Nom : {name}  \tPrix : {price}  \tProfit : {profit} ")
+        print(f"{index}\tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
+        index += 1
     print(
         f"\nProfit total : {round(profit_total, 2)} \tCout Total : {sum([float(i[1]) for i in actions_selection])}\n"
     )
@@ -90,7 +92,11 @@ def result_display(results: tuple):
 
 
 # méthode itertools.combinations
+print("\nUtilisation de itertools.combinations :")
+print("----------------------------------------")
 result_display(execution_time(lambda: itertools_brute_force(amount, data_list)))
 
 # méthode avec récursivité
+print("\nUtilisation de la récursivité :")
+print("-------------------------------")
 result_display(execution_time(lambda: recursive_brute_force(amount, data_list)))

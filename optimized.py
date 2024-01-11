@@ -28,10 +28,10 @@ def dynamic_method(amount: float, actions_list: list, type: int):
     Algorithme de programmation dynamique : Création d'une matrice amount * nombre d'actions
     Complexité : O(n*capacite)
     """
-    # type de precision, 1-> avec 2 décimales, 2-> en arrondissant au premier entier
+    # type de precision pour le prix de l'action , 1-> avec 2 décimales, 2-> en arrondissant au premier entier
     if type == 1:
         actions_list = [
-            [action[0], round(action[1] * 100), round(action[2] * 100)]
+            [action[0], round(action[1] * 100), action[2]]
             for action in actions_list
             if action[1] > 0
         ]
@@ -39,7 +39,7 @@ def dynamic_method(amount: float, actions_list: list, type: int):
         div_values = 100
     elif type == 2:
         actions_list = [
-            [action[0], round(action[1]), round(action[2])]
+            [action[0], round(action[1]), action[2]]
             for action in actions_list
             if action[1] > 0
         ]
@@ -81,11 +81,11 @@ def dynamic_method(amount: float, actions_list: list, type: int):
         nb_actions -= 1
 
     actions_list_selection = [
-        [action[0], action[1] / div_values, action[2] / div_values]
+        [action[0], action[1] / div_values, action[2]]
         for action in actions_list_selection
     ]
 
-    return matrice[-1][-1] / div_values, actions_list_selection
+    return matrice[-1][-1] / 1, actions_list_selection
 
 
 # affichage des resultats
@@ -95,9 +95,11 @@ def result_display(results: tuple):
     execution_time = results[1]
 
     print("\nListe d'actions: \n")
+    index = 1
     for action in actions_selection:
         name, price, profit = action
-        print(f"Nom : {name}  \tPrix : {price}  \tProfit : {profit} ")
+        print(f"{index} \tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
+        index += 1
     total_cost = round(sum([float(i[1]) for i in actions_selection]), 2)
     print(
         f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n"
@@ -108,7 +110,11 @@ def result_display(results: tuple):
 # méthode dynamique
 
 # type 1 avec 2 decimales
+print("\nMéthode Dynamique Type 1 : Prix de l'action avec deux décimales ( *100 pour conversion en nombre entier)")
+print("--------------------------------------------------------------------------------------------------------")
 result_display(execution_time(lambda: dynamic_method(amount, data_list, 1)))
 
 # type 2 en arrondissant
+print("\nMéthode Dynamique Type 2 : Prix de l'action Arrondi à l'entier le plus proche")
+print("------------------------------------------------------------------------------")
 result_display(execution_time(lambda: dynamic_method(amount, data_list, 2)))
