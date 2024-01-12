@@ -1,16 +1,20 @@
+![image](./assets/img.png)
+
+# AlgoInvest&Trade
+
 ## Configuration de l'environnement
 
 ### Installation et activation de l'environnement Virtuel
 Ouvrez un nouveau terminal et taper  
-```
+```bash
 python -m venv .venv-projet7
 ```
 Selectionner l'environnement virtuel dans visual studio code ou l'activer en se plaçant dans le dossier **.venv-projet7/scripts** et taper
-```
+```bash
 ./activate
 ```
 Installer les dependances necessaires au projet
-```
+```bash
 pip install -r requirements.txt
 ```
 
