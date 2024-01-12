@@ -42,10 +42,10 @@ Algorithmes qui d'aprés une liste d'actions comportant pour chacunes le nom , l
 
 Plusieurs méthodes sont utilisées :
 
-Les méthodes utilisent deux modules communs :
+Les méthodes utilisent deux fonctions communes :
 
-* `display.py` pour l'affichage des résultats
-* `performances.py` pour le calcul des performances
+* `result_display(results: tuple)` pour l'affichage des résultats
+* `execution_time(function)` pour le calcul des performances
 
 ### 1.  **Force Brute :** 
 Toutes les combinaisons d'actions sont calculées afin de faire ressortir la meilleure.

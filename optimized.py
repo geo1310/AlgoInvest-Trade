@@ -1,3 +1,36 @@
+'''
+Programmation Dynamique :
+Une matrice est crée, comprenant d'une part toutes les valeurs possibles du portefeuille de 0 au max
+et d'autre part une ligne pour chaque action de la liste en commencant par 0 action.
+Le but étant de construire la solution petit à petit pour chaque valeur de Portefeuille et en maximisant
+les valeurs d'actions pouvant y etre insérée par rapport à la ligne precedente.
+Avec cette méthode on uitlise les calculs deja effectués des lignes precedentes augmentant ainsi les performances.
+La derniere case de la matrice representant la solution optimale.
+
+Dans ce script on peut régler deux variables
+
+* `amount` : la valeur du portefeuille
+* `datas_actions_file` : le fichier csv contenant la liste des actions à analysées
+( les fichiers csv doivent etre placés dans le dossier data du projet)
+
+Ce script execute la fonction :
+
+1. `dynamic_method(amount: float, actions_list: list, type: int)`
+
+La fonction est lancée deux fois avec un type different :
+
+1. Type 1 : on garde la précision des prix d'actions ( 2 décimales )
+    amount et toutes les valeurs sont multipliées par 100 afin d'assurer le bon fonctionnement
+    de la matrice et de l'indexage ( nombres entiers).
+
+2. Type 2 : on garde l'amount et on arrondi les prix d'actions au nombre entier le plus proche.
+
+Aprés lancement du script la console affiche le résultat pour les deux types de calculs, le temps d'execution
+ainsi que la charge mémoire et la charge CPU.
+
+'''
+
+
 import pandas as pd
 import timeit
 import psutil

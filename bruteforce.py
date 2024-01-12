@@ -1,3 +1,30 @@
+'''
+Alogorithme de Force Brute :
+Toutes les combinaisons d'actions sont calculées afin de faire ressortir la meilleure.
+
+Dans ce script on peut régler deux variables
+
+* `amount` : la valeur du portefeuille
+* `datas_actions_file` : le fichier csv contenant la liste des actions à analysées
+( les fichiers csv doivent etre placés dans le dossier data du projet)
+
+Ce script execute deux fonctions :
+
+1. `itertools_brute_force(amount: float, actions_list: list)`
+
+    Calcule toutes les combinaisons possibles en utilisant la fonction `combinations` du module `itertools`,
+    qui génère toutes les combinaisons possibles d'une séquence avec une longueur donnée.
+
+2. `recursive_brute_force(amount: float, actions_list: list, actions_selection: list = None)`
+
+    Calcule toutes les combinaisons possibles en utilisant la récursivité
+
+Aprés lancement du script la console affiche le résultat pour les deux fonctions, le temps d'execution
+de chaque fonction ainsi que l'utilisation de la memoire et la charge CPU.
+
+'''
+
+
 from itertools import combinations
 import pandas as pd
 import timeit
