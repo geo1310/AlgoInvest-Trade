@@ -1,4 +1,4 @@
-'''
+"""
 Programmation Dynamique :
 Une matrice est crée, comprenant d'une part toutes les valeurs possibles du portefeuille de 0 au max
 et d'autre part une ligne pour chaque action de la liste en commencant par 0 action.
@@ -28,12 +28,14 @@ La fonction est lancée deux fois avec un type different :
 Aprés lancement du script la console affiche le résultat pour les deux types de calculs, le temps d'execution
 ainsi que la charge mémoire et la charge CPU.
 
-'''
+"""
 
+
+import psutil
+
+import timeit
 
 import pandas as pd
-import timeit
-import psutil
 
 
 # variables
@@ -52,6 +54,7 @@ def dynamic_method(amount: float, actions_list: list, type: int):
     Algorithme de programmation dynamique : Création d'une matrice amount * nombre d'actions
     Complexité : O(n*capacite)
     """
+
     # type de precision pour le prix de l'action , 1-> avec 2 décimales, 2-> en arrondissant au premier entier
     if type == 1:
         actions_list = [
@@ -61,6 +64,7 @@ def dynamic_method(amount: float, actions_list: list, type: int):
         ]
         amount *= 100
         div_values = 100
+
     elif type == 2:
         actions_list = [
             [action[0], round(action[1]), action[2]]
@@ -71,10 +75,13 @@ def dynamic_method(amount: float, actions_list: list, type: int):
 
     # creation de la matrice
     matrice = [[0 for _ in range(0, amount + 1)] for _ in range(len(actions_list) + 1)]
+
     # remplissage de la matrice
     for actions_index, current_action in enumerate(actions_list, start=1):
         for amount_range in range(1, amount + 1):
+            # commentaire
             if actions_list[actions_index - 1][1] <= amount_range:
+                # commentaire
                 matrice[actions_index][amount_range] = max(
                     actions_list[actions_index - 1][2]
                     + matrice[actions_index - 1][
@@ -82,6 +89,8 @@ def dynamic_method(amount: float, actions_list: list, type: int):
                     ],
                     matrice[actions_index - 1][amount_range],
                 )
+
+            # commetaire
             else:
                 matrice[actions_index][amount_range] = matrice[actions_index - 1][
                     amount_range
@@ -92,8 +101,11 @@ def dynamic_method(amount: float, actions_list: list, type: int):
     nb_actions = len(actions_list)
     actions_list_selection = []
 
+    # commentaire
     while amount_selection >= 0 and nb_actions >= 0:
         current_action = actions_list[nb_actions - 1]
+
+        # commentaire
         if (
             matrice[nb_actions][amount_selection]
             == matrice[nb_actions - 1][amount_selection - current_action[1]]
@@ -104,6 +116,7 @@ def dynamic_method(amount: float, actions_list: list, type: int):
 
         nb_actions -= 1
 
+    # commentaire
     actions_list_selection = [
         [action[0], action[1] / div_values, action[2]]
         for action in actions_list_selection
@@ -114,6 +127,8 @@ def dynamic_method(amount: float, actions_list: list, type: int):
 
 # affichage des resultats
 def result_display(results: tuple):
+    """DOCSTRING"""
+
     profit_total = results[0][0]
     actions_selection = results[0][1]
     execution_time = results[1]
@@ -122,21 +137,25 @@ def result_display(results: tuple):
 
     print("\nListe d'actions: \n")
     index = 1
+
+    # affichage des actions selectionnées???
     for action in actions_selection:
         name, price, profit = action
         print(f"{index}\tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
         index += 1
+
+    # commentaier
     total_cost = round(sum([action[1] for action in actions_selection]), 2)
-    print(
-        f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n"
-    )
+
+    print(f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n")
     print(f"Temps d'execution : {execution_time} ms.")
     print(f"Utilisation mémoire : {memory_used} bytes.")
     print(f"Utilisation CPU : {cpu_percent} %.\n")
 
 
-# calcul du temps d execution et les ressources mémoire et CPU d'une fonction
 def execution_time(function):
+    """# calcul du temps d execution et les ressources mémoire et CPU d'une fonction"""
+
     # Mesurer la mémoire avant l'exécution
     start_memory = psutil.Process().memory_info().rss
 
@@ -152,19 +171,28 @@ def execution_time(function):
     time_execution = round(((temps_fin - temps_debut) * 1000), 2)
 
     # Mesurer l'utilisation du CPU
-    cpu_percent = psutil.cpu_percent(interval=1)  # Utilisation CPU au cours de la dernière seconde
+    cpu_percent = psutil.cpu_percent(
+        interval=1
+    )  # Utilisation CPU au cours de la dernière seconde
 
     return resultat, time_execution, memory_used, cpu_percent
 
 
-# méthode dynamique
+def main():
+    """# méthode dynamique"""
 
-# type 1 avec 2 decimales
-print("\nMéthode Dynamique Type 1 : Prix de l'action avec deux décimales")
-print("---------------------------------------------------------------")
-result_display(execution_time(lambda: dynamic_method(amount, data_list, 1)))
+    # type 1 avec 2 decimales
+    print("\nMéthode Dynamique Type 1 : Prix de l'action avec deux décimales")
+    print(20 * "-")
+    result_display(execution_time(lambda: dynamic_method(amount, data_list, 1)))
 
-# type 2 en arrondissant
-print("\nMéthode Dynamique Type 2 : Prix de l'action Arrondi à l'entier le plus proche")
-print("------------------------------------------------------------------------------")
-result_display(execution_time(lambda: dynamic_method(amount, data_list, 2)))
+    # type 2 en arrondissant
+    print(
+        "\nMéthode Dynamique Type 2 : Prix de l'action Arrondi à l'entier le plus proche"
+    )
+    print(20 * "-")
+    result_display(execution_time(lambda: dynamic_method(amount, data_list, 2)))
+
+
+if __name__ == "__main__":
+    main()
