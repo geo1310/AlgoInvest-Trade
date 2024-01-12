@@ -26,9 +26,11 @@ de chaque fonction ainsi que l'utilisation de la memoire et la charge CPU.
 
 
 from itertools import combinations
-import pandas as pd
+
 import timeit
 import psutil
+
+import pandas as pd
 
 
 # variables
@@ -47,14 +49,17 @@ data_list = [action for action in data_list if action[1] > 0]
 def itertools_brute_force(
     amount: float,
     actions_list: list,
-):
+) -> tuple:
     """
     Algorithme de force brute avec itertools.combinations : Calcule toutes les possibilités
     Complexité : O(2^n)
     """
+
+    # default valies
     actions_selection_final = []
     profit_total_final = 0
 
+    # double boucle for
     for taille_combinaison in range(1, len(actions_list) + 1):
         for comb in combinations(actions_list, taille_combinaison):
             try:
@@ -77,12 +82,13 @@ def recursive_brute_force(
     amount: float,
     actions_list: list,
     actions_selection: list = None,
-):
+) -> tuple:
     """
     Algorithme de force brute avec récursivité : Calcule toutes les possibilités
     Complexité : O(2^n)
     """
 
+    # action select
     actions_selection = actions_selection if actions_selection else []
     if not actions_list:
         return sum([float(i[2]) for i in actions_selection]), actions_selection
@@ -104,11 +110,16 @@ def recursive_brute_force(
         )
         if profit_total_1 < profit_total_2:
             return profit_total_2, lst_profit_total_2
+
+    # 99% du temps on SAUTE UNE LIGEN ANANT LE RETURN
     return profit_total_1, lst_profit_total_1
 
 
 # affichage des resultats
 def result_display(results: tuple):
+    """ """
+
+    # default  values
     profit_total = results[0][0]
     actions_selection = results[0][1]
     execution_time = results[1]
@@ -117,19 +128,26 @@ def result_display(results: tuple):
 
     print("\nListe d'actions: \n")
     index = 1
+
+    # d,zedzzdez
     for action in actions_selection:
         name, price, profit = action
         print(f"{index}\tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
         index += 1
+
+    # zeddzdz
     total_cost = round(sum([action[1] for action in actions_selection]), 2)
+
+    # zedzzdezdez
     print(f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n")
     print(f"Temps d'execution : {execution_time} ms.")
     print(f"Utilisation mémoire : {memory_used} bytes.")
     print(f"Utilisation CPU : {cpu_percent} %.\n")
 
 
-# calcul du temps d execution et les ressources mémoire et CPU d'une fonction
 def execution_time(function):
+    """# calcul du temps d execution et les ressources mémoire et CPU d'une fonction"""
+
     # Mesurer la mémoire avant l'exécution
     start_memory = psutil.Process().memory_info().rss
 
@@ -152,12 +170,19 @@ def execution_time(function):
     return resultat, time_execution, memory_used, cpu_percent
 
 
-# méthode itertools.combinations
-print("\nUtilisation de itertools.combinations :")
-print("----------------------------------------")
-result_display(execution_time(lambda: itertools_brute_force(amount, data_list)))
+def main():
+    """ """
 
-# méthode avec récursivité
-print("\nUtilisation de la récursivité :")
-print("-------------------------------")
-result_display(execution_time(lambda: recursive_brute_force(amount, data_list)))
+    # méthode itertools.combinations
+    print("\nUtilisation de itertools.combinations :")
+    print("----------------------------------------")
+    result_display(execution_time(lambda: itertools_brute_force(amount, data_list)))
+
+    # méthode avec récursivité
+    print("\nUtilisation de la récursivité :")
+    print("-------------------------------")
+    result_display(execution_time(lambda: recursive_brute_force(amount, data_list)))
+
+
+if __name__ == "__main__":
+    main()
