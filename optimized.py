@@ -38,7 +38,7 @@ import psutil
 
 # variables
 amount = 500
-datas_actions_file = "./data/dataset0_Python+P7.csv"
+datas_actions_file = "./data/dataset1_Python+P7.csv"
 
 # extraction des données du fichier csv
 dataframe = pd.read_csv(datas_actions_file)
@@ -160,8 +160,8 @@ def execution_time(function):
 # méthode dynamique
 
 # type 1 avec 2 decimales
-print("\nMéthode Dynamique Type 1 : Prix de l'action avec deux décimales ( *100 pour conversion en nombre entier)")
-print("--------------------------------------------------------------------------------------------------------")
+print("\nMéthode Dynamique Type 1 : Prix de l'action avec deux décimales")
+print("---------------------------------------------------------------")
 result_display(execution_time(lambda: dynamic_method(amount, data_list, 1)))
 
 # type 2 en arrondissant
