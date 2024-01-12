@@ -5,7 +5,7 @@ Ouvrez un nouveau terminal et taper
 ```
 python -m venv .venv-projet7
 ```
-Selectionner l'environnement virtuel dans visual studio code ou l'activer en se plaçant dans le dossier **venv-projet4/scripts** et taper
+Selectionner l'environnement virtuel dans visual studio code ou l'activer en se plaçant dans le dossier **.venv-projet7/scripts** et taper
 ```
 ./activate
 ```
@@ -38,14 +38,19 @@ Vous pouvez également définir la politique sur "Bypass" pour permettre l'exéc
 
 ## AlgoInvest&Trade
 
-Algorithmes qui d'aprés une liste d'actions comportant pour chacune le nom , le prix et le profit, fait ressortir une liste d'actions avec un profit maximum pour un portefeuille donné ( 500€ par défaut ) en ne pouvant prendre qu'une unité par action.
+Algorithmes qui d'aprés une liste d'actions comportant pour chacunes le nom , le prix et le profit, fait ressortir une liste d'actions avec un profit maximum pour un portefeuille donné ( 500€ par défaut ) en ne pouvant prendre qu'une unité par action.
 
 Plusieurs méthodes sont utilisées :
+
+Les méthodes utilisent deux modules communs :
+
+* `display.py` pour l'affichage des résultats
+* `performances.py` pour le calcul des performances
 
 ### 1.  **Force Brute :** 
 Toutes les combinaisons d'actions sont calculées afin de faire ressortir la meilleure.
 
-### Usage : script bruteforce.py
+### Usage : `bruteforce.py`
 
 Dans ce script on peut régler deux variables
 
@@ -56,7 +61,7 @@ Ce script execute deux fonctions :
 
 1. `itertools_brute_force(amount: float, actions_list: list)`
 
-    Calcule toutes les combinaisons possibles en utilisant la fonction `combinations` du module `itertools`, qui génère toutes les combinaisons possibles d'une séquence
+    Calcule toutes les combinaisons possibles en utilisant la fonction `combinations` du module `itertools`, qui génère toutes les combinaisons possibles d'une séquence avec une longueur donnée.
 
 2. `recursive_brute_force(amount: float, actions_list: list, actions_selection: list = None)`
 
@@ -66,7 +71,7 @@ Ce script execute deux fonctions :
 python bruteforce.py  # ou python3 bruteforce.py
 ```
 
-Aprés lancement du script la console affiche le résultat pour les deux fonctions et le temps d'execution de chaque fonction.
+Aprés lancement du script la console affiche le résultat pour les deux fonctions, le temps d'execution de chaque fonction ainsi que l'utilisation de la memoire et la charge CPU.
 
 
 
@@ -77,7 +82,7 @@ le but étant de construire la solution petit à petit pour chaque valeur de Por
 Avec cette méthode on uitlise les calculs deja effectués des lignes precedentes augmentant ainsi les performances.
 La derniere case de la matrice representant la solution optimale.
 
-### Usage : script optimized.py
+### Usage : `optimized.py`
 
 Dans ce script on peut régler deux variables
 
@@ -100,7 +105,7 @@ La fonction est lancée deux fois avec un type different :
 python optimized.py  # ou python3 optimized.py
 ```
 
-Aprés lancement du script la console affiche le résultat pour les deux types de calculs et le temps d'execution.
+Aprés lancement du script la console affiche le résultat pour les deux types de calculs, le temps d'execution ainsi que la charge mémoire et la charge CPU.
 
 ---- 
 

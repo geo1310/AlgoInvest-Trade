@@ -1,26 +1,18 @@
 import pandas as pd
-import timeit
+
+from modules.display import result_display
+from modules.performances import execution_time
+
 
 # variables
 amount = 500
-datas_actions_file = "./data/dataset2_Python+P7.csv"
+datas_actions_file = "./data/dataset0_Python+P7.csv"
 
 # extraction des données du fichier csv
 dataframe = pd.read_csv(datas_actions_file)
 
 # Converti le DataFrame en liste
 data_list = dataframe.to_numpy().tolist()
-
-
-# calcul du temps d execution d'une fonction
-def execution_time(function):
-    temps_debut = timeit.default_timer()
-    resultat = function()
-    temps_fin = timeit.default_timer()
-    # durée d execution en millisecondes
-    time_execution = round(((temps_fin - temps_debut) * 1000), 2)
-
-    return resultat, time_execution
 
 
 def dynamic_method(amount: float, actions_list: list, type: int):
@@ -86,25 +78,6 @@ def dynamic_method(amount: float, actions_list: list, type: int):
     ]
 
     return matrice[-1][-1] / 1, actions_list_selection
-
-
-# affichage des resultats
-def result_display(results: tuple):
-    profit_total = results[0][0]
-    actions_selection = results[0][1]
-    execution_time = results[1]
-
-    print("\nListe d'actions: \n")
-    index = 1
-    for action in actions_selection:
-        name, price, profit = action
-        print(f"{index} \tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
-        index += 1
-    total_cost = round(sum([float(i[1]) for i in actions_selection]), 2)
-    print(
-        f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n"
-    )
-    print(f"\nTemps d'execution : {execution_time} ms.\n")
 
 
 # méthode dynamique

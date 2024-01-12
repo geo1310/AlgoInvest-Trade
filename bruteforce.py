@@ -1,6 +1,8 @@
 from itertools import combinations
 import pandas as pd
-import timeit
+
+from modules.display import result_display
+from modules.performances import execution_time
 
 
 # variables
@@ -14,17 +16,6 @@ dataframe = pd.read_csv(datas_actions_file)
 # Convertir le DataFrame en liste
 data_list = dataframe.to_numpy().tolist()
 data_list = [action for action in data_list if action[1] > 0]
-
-
-# calcul du temps d execution d'une fonction
-def execution_time(function):
-    temps_debut = timeit.default_timer()
-    resultat = function()
-    temps_fin = timeit.default_timer()
-    # durée d execution en millisecondes
-    time_execution = round(((temps_fin - temps_debut) * 1000), 2)
-
-    return resultat, time_execution
 
 
 def itertools_brute_force(amount: float, actions_list: list):
@@ -71,24 +62,6 @@ def recursive_brute_force(amount: float, actions_list: list, actions_selection: 
         if profit_total_1 < profit_total_2:
             return profit_total_2, lst_profit_total_2
     return profit_total_1, lst_profit_total_1
-
-
-# affichage des resultats
-def result_display(results: tuple):
-    profit_total = results[0][0]
-    actions_selection = results[0][1]
-    execution_time = results[1]
-
-    print("\nListe d'actions: \n")
-    index = 1
-    for action in actions_selection:
-        name, price, profit = action
-        print(f"{index}\tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
-        index += 1
-    print(
-        f"\nProfit total : {round(profit_total, 2)} \tCout Total : {sum([float(i[1]) for i in actions_selection])}\n"
-    )
-    print(f"\nTemps d'execution : {execution_time} ms.\n")
 
 
 # méthode itertools.combinations
