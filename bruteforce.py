@@ -33,7 +33,7 @@ import psutil
 import pandas as pd
 
 
-# variables
+# default values
 amount = 500
 datas_actions_file = "./data/dataset0_Python+P7.csv"
 
@@ -55,17 +55,17 @@ def itertools_brute_force(
     Complexité : O(2^n)
     """
 
-    # default valies
+    # default values
     actions_selection_final = []
     profit_total_final = 0
 
-    # double boucle for
+    # double boucle for pour toutes les tailles de combinaisons et toutes les combinaisons
     for taille_combinaison in range(1, len(actions_list) + 1):
         for comb in combinations(actions_list, taille_combinaison):
             try:
                 # blabla
-                profit_total = sum([float(action[2]) for action in comb])
-                cout_total = sum([float(action[1]) for action in comb])
+                profit_total = sum([action[2] for action in comb])
+                cout_total = sum([action[1] for action in comb])
 
                 # blabla
                 if profit_total > profit_total_final and cout_total <= amount:
@@ -91,7 +91,7 @@ def recursive_brute_force(
     # action select
     actions_selection = actions_selection if actions_selection else []
     if not actions_list:
-        return sum([float(i[2]) for i in actions_selection]), actions_selection
+        return sum([i[2] for i in actions_selection]), actions_selection
 
     # ne selectionne pas l'action
     profit_total_1, lst_profit_total_1 = recursive_brute_force(
@@ -102,7 +102,7 @@ def recursive_brute_force(
     action_current = actions_list[0]
 
     # verifie si le portefeuille restant permet d'acheter l'action
-    if float(action_current[1]) <= amount:
+    if action_current[1] <= amount:
         profit_total_2, lst_profit_total_2 = recursive_brute_force(
             amount - float(action_current[1]),
             actions_list[1:],
@@ -146,16 +146,14 @@ def result_display(results: tuple):
 
 
 def execution_time(function):
-    """# calcul du temps d execution et les ressources mémoire et CPU d'une fonction"""
+    """calcul du temps d execution et les ressources mémoire et CPU d'une fonction"""
 
-    # Mesurer la mémoire avant l'exécution
     start_memory = psutil.Process().memory_info().rss
-
     temps_debut = timeit.default_timer()
-    resultat = function()
-    temps_fin = timeit.default_timer()
 
-    # Mesurer la mémoire après l'exécution
+    resultat = function()
+
+    temps_fin = timeit.default_timer()
     end_memory = psutil.Process().memory_info().rss
     memory_used = end_memory - start_memory
 
@@ -171,7 +169,7 @@ def execution_time(function):
 
 
 def main():
-    """ """
+    """ execution des méthodes force brute avec itertools.combinations et ensuite avec la récursivité """
 
     # méthode itertools.combinations
     print("\nUtilisation de itertools.combinations :")
