@@ -63,11 +63,11 @@ def itertools_brute_force(
     for taille_combinaison in range(1, len(actions_list) + 1):
         for comb in combinations(actions_list, taille_combinaison):
             try:
-                # blabla
+                # enregiste le resultat de la combinaison actuelle
                 profit_total = sum([action[2] for action in comb])
                 cout_total = sum([action[1] for action in comb])
 
-                # blabla
+                # verifie si la combinaison actuelle est meilleure et si oui la mémorise
                 if profit_total > profit_total_final and cout_total <= amount:
                     actions_selection_final = comb
                     profit_total_final = profit_total
@@ -88,12 +88,15 @@ def recursive_brute_force(
     Complexité : O(2^n)
     """
 
-    # action select
+    # initialise la leste des actions selectionnees
     actions_selection = actions_selection if actions_selection else []
+
+    # verifie si la liste des actions est vide
     if not actions_list:
+        # si oui renvoie la somme des profits et la liste des actions selectionnees
         return sum([i[2] for i in actions_selection]), actions_selection
 
-    # ne selectionne pas l'action
+    # appel recursif sans l action actuelle
     profit_total_1, lst_profit_total_1 = recursive_brute_force(
         amount, actions_list[1:], actions_selection
     )
@@ -103,21 +106,23 @@ def recursive_brute_force(
 
     # verifie si le portefeuille restant permet d'acheter l'action
     if action_current[1] <= amount:
+        # appel recursif avec l action actuelle
         profit_total_2, lst_profit_total_2 = recursive_brute_force(
             amount - float(action_current[1]),
             actions_list[1:],
             actions_selection + [action_current],
         )
+
+        # compare les profits obtenus et retourne le meilleur
         if profit_total_1 < profit_total_2:
             return profit_total_2, lst_profit_total_2
 
-    # 99% du temps on SAUTE UNE LIGEN ANANT LE RETURN
     return profit_total_1, lst_profit_total_1
 
 
 # affichage des resultats
 def result_display(results: tuple):
-    """ """
+    """affichage des resultats"""
 
     # default  values
     profit_total = results[0][0]
@@ -129,16 +134,16 @@ def result_display(results: tuple):
     print("\nListe d'actions: \n")
     index = 1
 
-    # d,zedzzdez
+    # affiche la liste d'actions selectionnees
     for action in actions_selection:
         name, price, profit = action
         print(f"{index}\tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
         index += 1
 
-    # zeddzdz
+    # calcul le cout total de la liste d'actions selectionnees
     total_cost = round(sum([action[1] for action in actions_selection]), 2)
 
-    # zedzzdezdez
+    # affiche les resultats et les performances
     print(f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n")
     print(f"Temps d'execution : {execution_time} ms.")
     print(f"Utilisation mémoire : {memory_used} bytes.")
@@ -169,7 +174,7 @@ def execution_time(function):
 
 
 def main():
-    """ execution des méthodes force brute avec itertools.combinations et ensuite avec la récursivité """
+    """execution des méthodes force brute avec itertools.combinations et ensuite avec la récursivité"""
 
     # méthode itertools.combinations
     print("\nUtilisation de itertools.combinations :")

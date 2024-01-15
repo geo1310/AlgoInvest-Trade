@@ -38,7 +38,7 @@ import timeit
 import pandas as pd
 
 
-# variables
+# default values
 amount = 500
 datas_actions_file = "./data/dataset0_Python+P7.csv"
 
@@ -49,7 +49,11 @@ dataframe = pd.read_csv(datas_actions_file)
 data_list = dataframe.to_numpy().tolist()
 
 
-def dynamic_method(amount: float, actions_list: list, type: int):
+def dynamic_method(
+    amount: float,
+    actions_list: list,
+    type: int,
+) -> tuple:
     """
     Algorithme de programmation dynamique : Création d'une matrice amount * nombre d'actions
     Complexité : O(n*capacite)
@@ -57,31 +61,40 @@ def dynamic_method(amount: float, actions_list: list, type: int):
 
     # type de precision pour le prix de l'action , 1-> avec 2 décimales, 2-> en arrondissant au premier entier
     if type == 1:
+        # on verifie que le prix de l action est superieur a 0 et on multiplie par 100
         actions_list = [
             [action[0], round(action[1] * 100), action[2]]
             for action in actions_list
             if action[1] > 0
         ]
+
+        # on multiplie la capacite par 100 pour adapter la taille de la matrice
         amount *= 100
+
+        # valeur du diviseur pour recupérer la valeur reelle du prix des actions
         div_values = 100
 
     elif type == 2:
+        # on verifie que le prix de l action est superieur a zero et on l arrondi a l entier le plus proche
         actions_list = [
             [action[0], round(action[1]), action[2]]
             for action in actions_list
             if action[1] > 0
         ]
+
+        # valeur du diviseur pour recupérer la valeur reelle du prix des actions
         div_values = 1
 
-    # creation de la matrice
+    # creation de la matrice remplie de 0
     matrice = [[0 for _ in range(0, amount + 1)] for _ in range(len(actions_list) + 1)]
 
-    # remplissage de la matrice
+    # boucle sur chaque action de la liste
     for actions_index, current_action in enumerate(actions_list, start=1):
+        # boucle sur chaque capacite possible
         for amount_range in range(1, amount + 1):
-            # verifie si non depassement de l'amount en cours
+            # verifie si le cout de l'action actuelle est inferieur ou egal a la capacite en cours
             if actions_list[actions_index - 1][1] <= amount_range:
-                # commentaire
+                # si oui choisi la meilleure option possible entre inclure ou exclure l action actuelle
                 matrice[actions_index][amount_range] = max(
                     actions_list[actions_index - 1][2]
                     + matrice[actions_index - 1][
@@ -89,47 +102,53 @@ def dynamic_method(amount: float, actions_list: list, type: int):
                     ],
                     matrice[actions_index - 1][amount_range],
                 )
-
-            # commetaire
             else:
+                # si non affecte la case actuelle de la matrice avec la valeur de capacite precedente
                 matrice[actions_index][amount_range] = matrice[actions_index - 1][
                     amount_range
                 ]
 
     # recuperation des actions selectionnees en parcourant la matrice à l'envers
+
+    # default values
     amount_selection = amount
     nb_actions = len(actions_list)
     actions_list_selection = []
 
-    # commentaire
+    # boucle tant que la capacite et le nb dactions est superieur ou egal a zero
     while amount_selection >= 0 and nb_actions >= 0:
+        # selectionne l action actuelle
         current_action = actions_list[nb_actions - 1]
 
-        # commentaire
+        # verifie si la position actuelle est egale à la somme de la position precedente + profit action actuelle
         if (
             matrice[nb_actions][amount_selection]
             == matrice[nb_actions - 1][amount_selection - current_action[1]]
             + current_action[2]
         ):
+            # si oui on ajoute l action a la selection
             actions_list_selection.append(current_action)
+            # reduit la capacite de la valeur actuelle
             amount_selection -= current_action[1]
 
+        # decremente le nombre d actions disponibles
         nb_actions -= 1
 
-    # commentaire
+    # on modifie la valeur du prix de l action par rapport au type de calcul choisi 1 ou 2
     actions_list_selection = [
         [action[0], action[1] / div_values, action[2]]
         for action in actions_list_selection
     ]
 
-    return matrice[-1][-1] / 1, actions_list_selection
+    # on retourne la derniere case de la matrice et la liste des actions selectionnees
+    return matrice[-1][-1], actions_list_selection
 
 
 # affichage des resultats
 def result_display(results: tuple):
-    """Affichage des resultats"""
+    """affichage des resultats"""
 
-    # variables
+    # default  values
     profit_total = results[0][0]
     actions_selection = results[0][1]
     execution_time = results[1]
@@ -139,15 +158,16 @@ def result_display(results: tuple):
     print("\nListe d'actions: \n")
     index = 1
 
-    # affichage des actions selectionnées
+    # affiche la liste d'actions selectionnees
     for action in actions_selection:
         name, price, profit = action
         print(f"{index}\tNom : {name}  \tPrix : {price}  \tProfit : {profit} ")
         index += 1
 
-    # cout total des actions selectionnées
+    # calcul le cout total de la liste d'actions selectionnees
     total_cost = round(sum([action[1] for action in actions_selection]), 2)
 
+    # affiche les resultats et les performances
     print(f"\nProfit total : {round(profit_total, 2)} \tCout Total : {total_cost}\n")
     print(f"Temps d'execution : {execution_time} ms.")
     print(f"Utilisation mémoire : {memory_used} bytes.")
@@ -158,24 +178,23 @@ def execution_time(function):
     """calcul du temps d execution et les ressources mémoire et CPU d'une fonction"""
 
     start_memory = psutil.Process().memory_info().rss
-    start_time = timeit.default_timer()
+    temps_debut = timeit.default_timer()
 
-    # execution de la fonction
-    result = function()
+    resultat = function()
 
-    end_time = timeit.default_timer()
+    temps_fin = timeit.default_timer()
     end_memory = psutil.Process().memory_info().rss
     memory_used = end_memory - start_memory
 
     # durée d execution en millisecondes
-    time_execution = round(((end_time - start_time) * 1000), 2)
+    time_execution = round(((temps_fin - temps_debut) * 1000), 2)
 
     # Mesurer l'utilisation du CPU
     cpu_percent = psutil.cpu_percent(
         interval=1
     )  # Utilisation CPU au cours de la dernière seconde
 
-    return result, time_execution, memory_used, cpu_percent
+    return resultat, time_execution, memory_used, cpu_percent
 
 
 def main():
@@ -183,14 +202,14 @@ def main():
 
     # type 1 avec 2 decimales
     print("\nMéthode Dynamique Type 1 : Prix de l'action avec deux décimales")
-    print(20 * "-")
+    print(64 * "-")
     result_display(execution_time(lambda: dynamic_method(amount, data_list, 1)))
 
     # type 2 en arrondissant
     print(
         "\nMéthode Dynamique Type 2 : Prix de l'action Arrondi à l'entier le plus proche"
     )
-    print(20 * "-")
+    print(77 * "-")
     result_display(execution_time(lambda: dynamic_method(amount, data_list, 2)))
 
 
