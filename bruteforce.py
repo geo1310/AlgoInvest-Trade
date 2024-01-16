@@ -43,7 +43,9 @@ dataframe = pd.read_csv(datas_actions_file)
 
 # Convertir le DataFrame en liste
 data_list = dataframe.to_numpy().tolist()
-data_list = [action for action in data_list if action[1] > 0]
+
+# convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
+data_list = [[action[0], action[1], round((action[2]*action[1]/100), 2)] for action in data_list if action[1] > 0]
 
 
 def itertools_brute_force(
@@ -103,7 +105,7 @@ def recursive_brute_force(
 
     # selectionne l'action
     action_current = actions_list[0]
-
+  
     # verifie si le portefeuille restant permet d'acheter l'action
     if action_current[1] <= amount:
         # appel recursif avec l action actuelle
