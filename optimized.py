@@ -40,13 +40,16 @@ import pandas as pd
 
 # default values
 amount = 500
-datas_actions_file = "./data/dataset0_Python+P7.csv"
+datas_actions_file = "./data/dataset2_Python+P7.csv"
 
 # extraction des données du fichier csv
 dataframe = pd.read_csv(datas_actions_file)
 
 # Converti le DataFrame en liste
 data_list = dataframe.to_numpy().tolist()
+
+# convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
+data_list = [[action[0], action[1], round((action[2]*action[1]/100), 2)] for action in data_list if action[1] > 0]
 
 
 def dynamic_method(
@@ -65,7 +68,6 @@ def dynamic_method(
         actions_list = [
             [action[0], round(action[1] * 100), action[2]]
             for action in actions_list
-            if action[1] > 0
         ]
 
         # on multiplie la capacite par 100 pour adapter la taille de la matrice
@@ -79,7 +81,6 @@ def dynamic_method(
         actions_list = [
             [action[0], round(action[1]), action[2]]
             for action in actions_list
-            if action[1] > 0
         ]
 
         # valeur du diviseur pour recupérer la valeur reelle du prix des actions
