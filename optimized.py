@@ -125,7 +125,7 @@ def dynamic_method(
                     matrice[actions_index - 1][amount_range],
                 )
             else:
-                # si non affecte la case actuelle de la matrice avec la valeur de capacite precedente
+                # si non affecte la case actuelle de la matrice avec la valeur precedente
                 matrice[actions_index][amount_range] = matrice[actions_index - 1][
                     amount_range
                 ]
