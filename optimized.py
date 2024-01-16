@@ -40,16 +40,26 @@ import pandas as pd
 
 # default values
 amount = 500
-datas_actions_file = "./data/dataset2_Python+P7.csv"
+datas_actions_file = "./data/dataset0_Python+P7.csv"
 
-# extraction des données du fichier csv
-dataframe = pd.read_csv(datas_actions_file)
 
-# Converti le DataFrame en liste
-data_list = dataframe.to_numpy().tolist()
+def csv_to_list(file_path):
+    """ extraction des données du fichier csv et conversion en liste """
 
-# convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
-data_list = [[action[0], action[1], round((action[2]*action[1]/100), 2)] for action in data_list if action[1] > 0]
+    # utilisation de pandas
+    dataframe = pd.read_csv(file_path)
+
+    # Convertir le DataFrame en liste
+    data_list = dataframe.to_numpy().tolist()
+
+    # convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
+    data_list = [
+        [action[0], action[1], round((action[2]*action[1]/100), 2)]
+        for action in data_list
+        if action[1] > 0
+    ]
+
+    return data_list
 
 
 def dynamic_method(
@@ -68,6 +78,7 @@ def dynamic_method(
         actions_list = [
             [action[0], round(action[1] * 100), action[2]]
             for action in actions_list
+            if action[1] > 0
         ]
 
         # on multiplie la capacite par 100 pour adapter la taille de la matrice
@@ -77,10 +88,17 @@ def dynamic_method(
         div_values = 100
 
     elif type == 2:
-        # on verifie que le prix de l action est superieur a zero et on l arrondi a l entier le plus proche
+        # on arrondi le prix de l action a l entier le plus proche
         actions_list = [
             [action[0], round(action[1]), action[2]]
             for action in actions_list
+        ]
+
+        # suppression des eventuelles action avec un prix egal à zero
+        actions_list = [
+            action 
+            for action in actions_list 
+            if action[1] > 0
         ]
 
         # valeur du diviseur pour recupérer la valeur reelle du prix des actions
@@ -200,6 +218,8 @@ def execution_time(function):
 
 def main():
     """execution de la méthode dynamique avec deux types de précisions"""
+
+    data_list = csv_to_list(datas_actions_file)
 
     # type 1 avec 2 decimales
     print("\nMéthode Dynamique Type 1 : Prix de l'action avec deux décimales")

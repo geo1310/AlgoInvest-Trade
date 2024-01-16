@@ -37,15 +37,24 @@ import pandas as pd
 amount = 500
 datas_actions_file = "./data/dataset0_Python+P7.csv"
 
-# extraction des données du fichier csv
-# utilisation de pandas
-dataframe = pd.read_csv(datas_actions_file)
 
-# Convertir le DataFrame en liste
-data_list = dataframe.to_numpy().tolist()
+def csv_to_list(file_path):
+    """ extraction des données du fichier csv et conversion en liste """
 
-# convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
-data_list = [[action[0], action[1], round((action[2]*action[1]/100), 2)] for action in data_list if action[1] > 0]
+    # utilisation de pandas
+    dataframe = pd.read_csv(file_path)
+
+    # Convertir le DataFrame en liste
+    data_list = dataframe.to_numpy().tolist()
+
+    # convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
+    data_list = [
+        [action[0], action[1], round((action[2]*action[1]/100), 2)]
+        for action in data_list
+        if action[1] > 0
+    ]
+
+    return data_list
 
 
 def itertools_brute_force(
@@ -105,7 +114,7 @@ def recursive_brute_force(
 
     # selectionne l'action
     action_current = actions_list[0]
-  
+
     # verifie si le portefeuille restant permet d'acheter l'action
     if action_current[1] <= amount:
         # appel recursif avec l action actuelle
@@ -122,7 +131,6 @@ def recursive_brute_force(
     return profit_total_1, lst_profit_total_1
 
 
-# affichage des resultats
 def result_display(results: tuple):
     """affichage des resultats"""
 
@@ -177,6 +185,8 @@ def execution_time(function):
 
 def main():
     """execution des méthodes force brute avec itertools.combinations et ensuite avec la récursivité"""
+
+    data_list = csv_to_list(datas_actions_file)
 
     # méthode itertools.combinations
     print("\nUtilisation de itertools.combinations :")
