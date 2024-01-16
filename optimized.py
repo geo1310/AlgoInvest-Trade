@@ -137,8 +137,8 @@ def dynamic_method(
     nb_actions = len(actions_list)
     actions_list_selection = []
 
-    # boucle tant que la capacite et le nb dactions est superieur ou egal a zero
-    while amount_selection >= 0 and nb_actions >= 0:
+    # boucle tant que la capacite et le nb dactions est superieur  a zero
+    while amount_selection > 0 and nb_actions > 0:
         # selectionne l action actuelle
         current_action = actions_list[nb_actions - 1]
 

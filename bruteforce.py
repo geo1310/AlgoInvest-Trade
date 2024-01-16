@@ -125,7 +125,7 @@ def recursive_brute_force(
             amount - float(action_current[1]),
             actions_list[1:],
             actions_selection + [action_current],
-        )
+        )  
 
         # compare les profits obtenus et retourne le meilleur
         if profit_total_1 < profit_total_2:
