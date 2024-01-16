@@ -120,7 +120,7 @@ Aprés lancement du script la console affiche le résultat pour les deux types d
 
 Dans le terminal dans le dossier du projet , tapez la commande suivante pour afficher la politique d'exécution actuelle :
 ```
-flake8 --format=html --htmldir=rapports_flake8 --exclude=.venv-projet4
+flake8 --format=html --htmldir=rapports_flake8 --exclude=.venv-projet7
 ```
 Le rapport sera sauvegardé dans le dossier rapports_flake8, il suffira de lancer le fichier index.html
 

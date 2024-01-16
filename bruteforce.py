@@ -39,13 +39,16 @@ datas_actions_file = "./data/dataset0_Python+P7.csv"
 
 
 def csv_to_list(file_path):
-    """ extraction des données du fichier csv et conversion en liste """
+    """
+    extraction des données du fichier csv, conversion en liste
+    transforme le benefice (%) de chaque action en profit reel
+    """
 
-    # utilisation de pandas
+    # creation d u dataframe avec pandas
     dataframe = pd.read_csv(file_path)
 
-    # Convertir le DataFrame en liste
-    data_list = dataframe.to_numpy().tolist()
+    # Converti le DataFrame en liste
+    data_list = dataframe.values.tolist()
 
     # convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
     data_list = [

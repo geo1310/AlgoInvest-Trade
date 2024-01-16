@@ -40,17 +40,20 @@ import pandas as pd
 
 # default values
 amount = 500
-datas_actions_file = "./data/dataset0_Python+P7.csv"
+datas_actions_file = "./data/dataset1_Python+P7.csv"
 
 
 def csv_to_list(file_path):
-    """ extraction des données du fichier csv et conversion en liste """
+    """
+    extraction des données du fichier csv, conversion en liste
+    transforme le benefice (%) de chaque action en profit reel
+    """
 
     # utilisation de pandas
     dataframe = pd.read_csv(file_path)
 
     # Convertir le DataFrame en liste
-    data_list = dataframe.to_numpy().tolist()
+    data_list = dataframe.values.tolist()
 
     # convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
     data_list = [
@@ -96,8 +99,8 @@ def dynamic_method(
 
         # suppression des eventuelles action avec un prix egal à zero
         actions_list = [
-            action 
-            for action in actions_list 
+            action
+            for action in actions_list
             if action[1] > 0
         ]
 
