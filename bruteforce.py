@@ -102,7 +102,7 @@ def recursive_brute_force(
     Complexité : O(2^n)
     """
 
-    # initialise la leste des actions selectionnees
+    # initialise la liste des actions selectionnees
     actions_selection = actions_selection if actions_selection else []
 
     # verifie si la liste des actions est vide
@@ -125,7 +125,7 @@ def recursive_brute_force(
             amount - float(action_current[1]),
             actions_list[1:],
             actions_selection + [action_current],
-        )  
+        )
 
         # compare les profits obtenus et retourne le meilleur
         if profit_total_1 < profit_total_2:

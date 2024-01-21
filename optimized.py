@@ -40,7 +40,7 @@ import pandas as pd
 
 # default values
 amount = 500
-datas_actions_file = "./data/dataset1_Python+P7.csv"
+datas_actions_file = "./data/dataset0_Python+P7.csv"
 
 
 def csv_to_list(file_path):
