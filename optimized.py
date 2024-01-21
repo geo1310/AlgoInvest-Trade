@@ -40,7 +40,11 @@ import pandas as pd
 
 # default values
 amount = 500
+<<<<<<< HEAD
 datas_actions_file = "./data/dataset0_Python+P7.csv"
+=======
+datas_actions_file = "./data/dataset2_Python+P7.csv"
+>>>>>>> e1a50f9bcd3a773cbec287969740c71118b5e64e
 
 
 def csv_to_list(file_path):
@@ -52,7 +56,7 @@ def csv_to_list(file_path):
     # utilisation de pandas
     dataframe = pd.read_csv(file_path)
 
-    # Convertir le DataFrame en liste
+    # convertit le DataFrame en liste
     data_list = dataframe.values.tolist()
 
     # convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
@@ -77,11 +81,10 @@ def dynamic_method(
 
     # type de precision pour le prix de l'action , 1-> avec 2 décimales, 2-> en arrondissant au premier entier
     if type == 1:
-        # on verifie que le prix de l action est superieur a 0 et on multiplie par 100
+        # on multiplie par 100 le prix de l'action par 100 pour créer un nombre entier
         actions_list = [
             [action[0], round(action[1] * 100), action[2]]
             for action in actions_list
-            if action[1] > 0
         ]
 
         # on multiplie la capacite par 100 pour adapter la taille de la matrice

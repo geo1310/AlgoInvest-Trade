@@ -44,10 +44,10 @@ def csv_to_list(file_path):
     transforme le benefice (%) de chaque action en profit reel
     """
 
-    # creation d u dataframe avec pandas
+    # creation du dataframe avec pandas
     dataframe = pd.read_csv(file_path)
 
-    # Converti le DataFrame en liste
+    # Convertit le DataFrame en liste
     data_list = dataframe.values.tolist()
 
     # convertit le pourcentage en profit reel et supprime les actions avec un prix <= 0
